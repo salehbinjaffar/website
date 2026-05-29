@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>मेनू — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>मेनू संपादित करें</h1>
+      <nav class="admin-nav">
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/admin/settings">सेटिंग</a>
+        <a href="/admin/pages">पेज</a>
+        <a href="/admin/live">LIVE</a>
+        <a href="/admin/ads">विज्ञापन</a>
+        <a href="/admin/articles">खबरें</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+    <form method="post" action="/admin/menu" class="card">
+      <input type="hidden" id="menu_count" name="menu_count" value="{{MENU_COUNT}}">
+      <input type="hidden" id="top_count" name="top_count" value="{{TOP_COUNT}}">
+
+      <h2>मुख्य नेविगेशन (Main Navigation)</h2>
+      <p class="hint">होम, LIVE (<code>/live</code>), संपर्क (<code>/contact</code>), श्रेणियाँ (<code>/category/desh</code>) जोड़ें।</p>
+      <table id="menu-table">
+        <thead><tr><th>लेबल</th><th>URL</th><th></th></tr></thead>
+        <tbody>{{MENU_ROWS}}</tbody>
+      </table>
+      <button type="button" data-add-menu>+ मुख्य मेनू आइटम</button>
+
+      <h2>टॉप बार मेनू</h2>
+      <table id="top-table">
+        <thead><tr><th>लेबल</th><th>URL</th><th></th></tr></thead>
+        <tbody>{{TOP_ROWS}}</tbody>
+      </table>
+      <button type="button" data-add-top>+ टॉप मेनू आइटम</button>
+
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+  <script src="/public/js/menu-admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>लॉगिन — News India TV Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="login-box card">
+    <h1>संपादन पैनल</h1>
+    <p>साइट की सभी सेटिंग और खबरें यहाँ बदलें।</p>
+    {{ERROR}}
+    <form method="post" action="{{LOGIN_ACTION}}" accept-charset="UTF-8">
+      <label>यूज़रनेम</label>
+      <input name="username" required autocomplete="username" value="admin">
+      <label>पासवर्ड</label>
+      <input name="password" type="password" required autocomplete="current-password">
+      <button type="submit">लॉगिन</button>
+    </form>
+    <p style="font-size:0.85rem;color:#666;margin-top:1rem">पासवर्ड में <code>#</code> जैसे अक्षर चलते हैं। यूज़रनेम: <strong>admin</strong></p>
+    <p><a href="{{HOME_LINK}}">← वेबसाइट देखें</a></p>
+  </div>
+</body>
+</html>

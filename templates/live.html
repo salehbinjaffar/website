@@ -1,0 +1,9 @@
+<section class="live-page">
+  <h1 class="section-title">{{LIVE_TITLE}} <span class="live-dot" aria-hidden="true"></span></h1>
+  {{HAS_STREAM}}
+  <div class="live-player-wrap">
+    <video id="live-player" class="live-player" controls playsinline webkit-playsinline autoplay muted data-hls="{{HLS_URL}}" poster="{{POSTER_URL}}"></video>
+    <button type="button" id="live-unmute" class="live-unmute" hidden>आवाज़ चालू करें</button>
+  </div>
+  <p class="live-hint">वीडियो ऑटो-प्ले म्यूट में शुरू होता है — आवाज़ के लिए बटन दबाएं।</p>
+</section>

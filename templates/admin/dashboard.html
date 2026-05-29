@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>डैशबोर्ड — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>{{SITE_NAME}} — Admin</h1>
+      <nav class="admin-nav">
+        <a href="/admin/settings">साइट सेटिंग</a>
+        <a href="/admin/home-features">स्लाइडर / ब्रेकिंग</a>
+        <a href="/admin/menu">मेनू</a>
+        <a href="/admin/pages">पेज</a>
+        <a href="/admin/live">LIVE</a>
+        <a href="/admin/ads">Google Ads</a>
+        <a href="/admin/articles">खबरें</a>
+        <a href="/" target="_blank">साइट देखें</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    <div class="stats card">
+      <div class="stat"><strong>{{ARTICLE_COUNT}}</strong> खबरें</div>
+      <div class="stat"><strong>{{CATEGORY_COUNT}}</strong> श्रेणियाँ</div>
+    </div>
+    <div class="card">
+      <h2>क्या बदल सकते हैं?</h2>
+      <ul>
+        <li><a href="/admin/settings">लोगो अपलोड, साइट नाम, टैगलाइन, रंग, सोशल, पासवर्ड</a></li>
+        <li><a href="/admin/home-features">होम स्लाइडर (घूमती तस्वीरें) + स्क्रॉल ब्रेकिंग न्यूज़</a></li>
+        <li><a href="/admin/articles/new">खबरें — फोटो आसानी से अपलोड</a></li>
+        <li><a href="/admin/menu">मुख्य नेविगेशन + टॉप मेनू (जोड़ें / हटाएं)</a></li>
+        <li><a href="/admin/pages">संपर्क पेज + गोपनीयता पेज</a></li>
+        <li><a href="/admin/live">LIVE टैब — HLS (.m3u8) स्ट्रीम लिंक</a></li>
+        <li><a href="/admin/ads">Google AdSense कोड और प्लेसमेंट</a></li>
+        <li><a href="/admin/articles">खबरें — शेयर थंबनेल के साथ ऑटो OG टैग</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

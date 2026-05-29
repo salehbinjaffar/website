@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>साइट सेटिंग — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>साइट सेटिंग</h1>
+      <nav class="admin-nav">
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/admin/menu">मेनू</a>
+        <a href="/admin/pages">पेज</a>
+        <a href="/admin/live">LIVE</a>
+        <a href="/admin/ads">Ads</a>
+        <a href="/admin/articles">खबरें</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+    <form method="post" action="/admin/settings" class="card" enctype="multipart/form-data">
+      <h2>लोगो</h2>
+      <p class="hint">PNG/JPG/WebP — हेडर में टेक्स्ट की जगह लोगो दिखेगा।</p>
+      {{LOGO_PREVIEW}}
+      <label>नया लोगो अपलोड करें</label>
+      <input type="file" id="logo-file" accept="image/jpeg,image/png,image/webp,image/gif">
+      <input type="hidden" name="logoBase64" id="logo-base64">
+      <p id="logo-status" class="upload-status"></p>
+      <label><input type="checkbox" name="removeLogo"> लोगो हटाएं (टेक्स्ट नाम दिखेगा)</label>
+
+      <h2>ब्रांडिंग</h2>
+      <label>साइट का नाम</label>
+      <input name="siteName" value="{{SITE_NAME}}" required>
+      <label>टैगलाइन</label>
+      <input name="tagline" value="{{TAGLINE}}">
+      <label>ब्रेकिंग टिकर टेक्स्ट</label>
+      <input name="breakingText" value="{{BREAKING_TEXT}}">
+      <label>एक्सेंट रंग (hex)</label>
+      <input name="accentColor" value="{{ACCENT_COLOR}}" placeholder="#c41e3a">
+      <h2>सोशल मीडिया (आइकन हेडर और फुटर में)</h2>
+      <label>Facebook URL</label>
+      <input name="facebook" value="{{FACEBOOK}}">
+      <label>X / Twitter URL</label>
+      <input name="twitter" value="{{TWITTER}}">
+      <label>YouTube URL</label>
+      <input name="youtube" value="{{YOUTUBE}}">
+      <label>Instagram URL</label>
+      <input name="instagram" value="{{INSTAGRAM}}">
+      <label>WhatsApp (नंबर जैसे 9198xxxxxxxx या पूरा wa.me लिंक)</label>
+      <input name="whatsapp" value="{{WHATSAPP}}">
+      <h2>लॉगिन</h2>
+      <label>एडमिन यूज़रनेम</label>
+      <input name="username" value="{{USERNAME}}">
+      <label>वर्तमान पासवर्ड (नया पासवर्ड सेट करने के लिए)</label>
+      <input name="currentPassword" type="password" autocomplete="current-password">
+      <label>नया पासवर्ड (खाली छोड़ें = नहीं बदलेगा)</label>
+      <input name="newPassword" type="password" autocomplete="new-password">
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+  <script src="/public/js/admin-upload.js"></script>
+</body>
+</html>

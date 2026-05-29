@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>पेज — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>संपर्क और गोपनीयता पेज</h1>
+      <nav class="admin-nav">
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/admin/menu">मेनू</a>
+        <a href="/contact" target="_blank">संपर्क देखें</a>
+        <a href="/privacy" target="_blank">गोपनीयता देखें</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+    <form method="post" action="/admin/pages" class="card">
+      <h2>संपर्क पेज (<a href="/contact" target="_blank">/contact</a>)</h2>
+      <label>शीर्षक</label>
+      <input name="contactTitle" value="{{CONTACT_TITLE}}">
+      <label>सामग्री (पैराग्राफ खाली लाइन से; या HTML पेस्ट करें)</label>
+      <textarea name="contactBody" rows="8">{{CONTACT_BODY}}</textarea>
+
+      <h2>गोपनीयता पेज (<a href="/privacy" target="_blank">/privacy</a>)</h2>
+      <label>शीर्षक</label>
+      <input name="privacyTitle" value="{{PRIVACY_TITLE}}">
+      <label>सामग्री (<code>##</code> से उपशीर्षक; HTML भी चलेगा)</label>
+      <textarea name="privacyBody" rows="14">{{PRIVACY_BODY}}</textarea>
+
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+</body>
+</html>

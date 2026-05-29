@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>होम स्लाइडर और ब्रेकिंग — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>स्लाइडर और ब्रेकिंग न्यूज़</h1>
+      <nav class="admin-nav">
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/" target="_blank">साइट देखें</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+
+    <form method="post" action="/admin/home-features" class="card">
+      <h2>RSS — स्वचालित ब्रेकिंग (किसी भी वेबसाइट से)</h2>
+      <p class="hint">किसी न्यूज़ साइट का RSS/Atom फ़ीड URL दें। टिकर कैश समय (नीचे) के बाद अपने आप अपडेट होगा। साइट पर <code>/rss</code> या <code>/feed</code> लिंक ढूंढें।</p>
+      {{RSS_STATUS}}
+      <label class="checkbox-row"><input type="checkbox" name="rssEnabled" {{RSS_ENABLED}}> RSS से ब्रेकिंग चलाएं (ऑटो स्क्रॉल)</label>
+      <div class="form-row">
+        <label>अधिकतम खबरें</label>
+        <input name="rssMaxItems" type="number" min="3" max="30" value="{{RSS_MAX_ITEMS}}">
+        <label>कैश (मिनट)</label>
+        <input name="rssCacheMinutes" type="number" min="5" max="360" value="{{RSS_CACHE_MINUTES}}">
+      </div>
+      <label class="checkbox-row"><input type="checkbox" name="rssMergeManual" {{RSS_MERGE_MANUAL}}> RSS के साथ मैन्युअल खबरें भी जोड़ें</label>
+      <table id="rss-feed-table">
+        <thead><tr><th>RSS फ़ीड URL</th><th></th></tr></thead>
+        <tbody>{{RSS_FEED_ROWS}}</tbody>
+      </table>
+      <button type="button" data-add-rss>+ RSS फ़ीड जोड़ें</button>
+      <button type="submit" name="refreshRss" value="on" class="btn-secondary">अभी RSS अपडेट करें</button>
+
+      <h2>ब्रेकिंग टिकर (मैन्युअल)</h2>
+      <p class="hint">RSS बंद होने पर या “मर्ज” चेक होने पर ये खबरें दिखेंगी।</p>
+      <label>लेबल (ब्रेकिंग)</label>
+      <input name="breakingLabel" value="{{BREAKING_LABEL}}">
+      <label>स्क्रॉल गति (सेकंड, कम = तेज)</label>
+      <input name="breakingSpeed" type="number" min="15" max="120" value="{{BREAKING_SPEED}}">
+      <table id="breaking-table">
+        <thead><tr><th>खबर टेक्स्ट</th><th>लिंक URL</th><th></th></tr></thead>
+        <tbody>{{BREAKING_ROWS}}</tbody>
+      </table>
+      <button type="button" data-add-breaking>+ ब्रेकिंग खबर</button>
+
+      <h2>होमपेज फोटो स्लाइडर</h2>
+      <p class="hint">बड़ी घूमती तस्वीरें (Bhaskar जैसी)। खाली छोड़ें तो ऑटो-मोड में ताज़ा खबरें दिखेंगी।</p>
+      <table id="slider-table">
+        <thead><tr><th>शीर्षक</th><th>इमेज URL</th><th>लिंक</th><th></th></tr></thead>
+        <tbody>{{SLIDER_ROWS}}</tbody>
+      </table>
+      <button type="button" data-add-slider>+ स्लाइड जोड़ें</button>
+
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+  <script src="/public/js/admin-home-features.js"></script>
+</body>
+</html>

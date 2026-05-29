@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>खबरें — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>सभी खबरें</h1>
+      <nav class="admin-nav">
+        <a href="/admin/articles/new">+ नई खबर</a>
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>शीर्षक</th><th>श्रेणी</th><th>हीरो</th><th>कार्रवाई</th></tr>
+        </thead>
+        <tbody>{{ARTICLE_ROWS}}</tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

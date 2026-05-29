@@ -1,0 +1,15 @@
+# Apache / cPanel (public_html) — send all requests to index.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Allow real files and folders (css, js, images)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>
+
+# If site is in a subfolder, set RewriteBase, e.g.:
+# RewriteBase /news-india-tv/

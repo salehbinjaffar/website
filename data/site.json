@@ -1,0 +1,255 @@
+{
+  "settings": {
+    "siteName": "News India TV",
+    "tagline": "हिंदी न्यूज़ — ताज़ा और विश्वसनीय समाचार",
+    "breakingText": "ताज़ा खबर: News India TV पर पाएं देश-दुनिया, खेल और मनोरंजन की हर बड़ी खबर",
+    "accentColor": "#c41e3a",
+    "logoUrl": "",
+    "social": {
+      "facebook": "",
+      "twitter": "",
+      "youtube": "",
+      "instagram": "",
+      "whatsapp": ""
+    }
+  },
+  "breaking": {
+    "label": "ब्रेकिंग",
+    "speed": 32,
+    "rss": {
+      "enabled": false,
+      "maxItems": 12,
+      "cacheMinutes": 20,
+      "mergeManual": false,
+      "feeds": [],
+      "items": [],
+      "fetchedAt": "",
+      "lastError": ""
+    },
+    "items": [
+      { "text": "News India TV लाइव — अब देखें ब्रेकिंग न्यूज़", "url": "/live" },
+      { "text": "ताज़ा खबर: देश-दुनिया, खेल, बॉलीवुड और व्यापार", "url": "/" },
+      { "text": "मौसम अपडेट: देश भर में बारिश और ठंडी हवाएं", "url": "/category/city" }
+    ]
+  },
+  "slider": [],
+  "pages": {
+    "contact": {
+      "title": "संपर्क करें",
+      "body": "<p>सुझाव और समाचार के लिए हमें लिखें।</p><p><strong>ईमेल:</strong> contact@newsindiatv.com</p><p><strong>फोन:</strong> +91-XXXXXXXXXX</p><p><strong>पता:</strong> नई दिल्ली, भारत</p>"
+    },
+    "privacy": {
+      "title": "गोपनीयता नीति",
+      "body": "<p>यह गोपनीयता नीति बताती है कि News India TV आपकी जानकारी कैसे एकत्र और उपयोग करता है।</p><h2>कुकीज़ और विज्ञापन</h2><p>हम Google AdSense और विश्लेषण के लिए कुकीज़ का उपयोग कर सकते हैं। Google तृतीय-पक्ष विज्ञापनदाताओं के रूप में कुकीज़ का उपयोग करके आपको विज्ञापन दिखा सकता है।</p><h2>Google विज्ञापन</h2><p>AdSense कोड एडमिन पैनल से जोड़ा जा सकता है। अधिक जानकारी: <a href=\"https://policies.google.com/privacy\" target=\"_blank\" rel=\"noopener\">Google Privacy Policy</a></p>"
+    }
+  },
+  "live": {
+    "enabled": true,
+    "tabLabel": "LIVE",
+    "title": "News India TV — लाइव चैनल",
+    "hlsUrl": "https://newsindiatvlive.in/newsindia/newsindia/index.m3u8",
+    "posterUrl": ""
+  },
+  "ads": {
+    "googleHeadScript": "",
+    "googleBodySlot": "",
+    "showOnHome": true,
+    "showOnArticle": true,
+    "showOnPrivacy": true,
+    "showOnContact": false
+  },
+  "auth": {
+    "username": "admin",
+    "passwordHash": "1fb05c916ad8f429b119d8843a44350003f45f49b47057c78310905e0ef377a9253c2af2ec0b0b6980b2c267ff1031e08a62c7d3d9acb4df7bece006ea754a47",
+    "passwordSalt": "54a69ffda4e573749d86e1bb6ac07c0a",
+    "hashAlgo": "pbkdf2"
+  },
+  "topLinks": [
+    {
+      "label": "ई-पेपर",
+      "url": "#"
+    },
+    {
+      "label": "वीडियो",
+      "url": "#"
+    },
+    {
+      "label": "फोटो",
+      "url": "#"
+    },
+    {
+      "label": "होम",
+      "url": "/"
+    }
+  ],
+  "menu": [
+    {
+      "label": "होम",
+      "url": "/"
+    },
+    {
+      "label": "देश",
+      "url": "/category/desh"
+    },
+    {
+      "label": "दुनिया",
+      "url": "/category/duniya"
+    },
+    {
+      "label": "खेल",
+      "url": "/category/khel"
+    },
+    {
+      "label": "क्रिकेट",
+      "url": "/category/cricket"
+    },
+    {
+      "label": "बॉलीवुड",
+      "url": "/category/bollywood"
+    },
+    {
+      "label": "व्यापार",
+      "url": "/category/business"
+    },
+    {
+      "label": "शिक्षा",
+      "url": "/category/education"
+    },
+    {
+      "label": "शहर और राज्य",
+      "url": "/category/city"
+    },
+    {
+      "label": "LIVE",
+      "url": "/live"
+    },
+    {
+      "label": "संपर्क",
+      "url": "/contact"
+    }
+  ],
+  "categories": [
+    {
+      "id": "desh",
+      "name": "देश"
+    },
+    {
+      "id": "duniya",
+      "name": "दुनिया"
+    },
+    {
+      "id": "khel",
+      "name": "खेल"
+    },
+    {
+      "id": "cricket",
+      "name": "क्रिकेट"
+    },
+    {
+      "id": "bollywood",
+      "name": "बॉलीवुड"
+    },
+    {
+      "id": "business",
+      "name": "व्यापार"
+    },
+    {
+      "id": "education",
+      "name": "शिक्षा"
+    },
+    {
+      "id": "city",
+      "name": "शहर और राज्य"
+    }
+  ],
+  "articles": [
+    {
+      "id": "a1",
+      "slug": "pm-modi-hails-indian-wrestlers-u23-asian-championship",
+      "title": "U23 Wrestling: एशियाई चैंपियनशिप में भारतीय पहलवानों की जीत पर PM Modi ने की तारीफ",
+      "categoryId": "khel",
+      "excerpt": "प्रधानमंत्री ने सोशल मीडिया पर पुरुष और महिला पहलवानों को जीत की बधाई दी।",
+      "body": "<p>एशियाई कुश्ती चैंपियनशिप में भारतीय पहलवानों के शानदार प्रदर्शन की प्रधानमंत्री नरेंद्र मोदी ने गुरुवार को जमकर तारीफ की। उन्होंने सोशल मीडिया प्लेटफॉर्म एक्स पर पुरुष और महिला पहलवानों को जीत की बधाई दी।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&h=506&fit=crop",
+      "featured": true,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a2",
+      "slug": "gujarat-student-canada-tragedy",
+      "title": "कनाडा में गुजरात की छात्रा की हत्या: परिवार को 12 दिन बाद मिली जानकारी",
+      "categoryId": "desh",
+      "excerpt": "परिवार ने न्याय की गुहार लगाई है।",
+      "body": "<p>कनाडा में रह रही एक गुजराती छात्रा की हत्या के मामले में परिवार को 12 दिन बाद जानकारी मिली।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a3",
+      "slug": "delhi-ncr-rain-relief",
+      "title": "दिल्ली-NCR में बारिश, गर्मी से मिली राहत; IMD ने जारी किया अलर्ट",
+      "categoryId": "city",
+      "excerpt": "कई इलाकों में बारिश से लोगों को राहत मिली।",
+      "body": "<p>दिल्ली-NCR के कई हिस्सों में बारिश हुई और मौसम में ठंडक आई।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1527482791131-9883f35f49f3?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a4",
+      "slug": "ipl-2026-hardik-pandya-social-media",
+      "title": "IPL 2026: हार्दिक पांड्या पर सोशल मीडिया पर चर्चा",
+      "categoryId": "cricket",
+      "excerpt": "मुंबई इंडियंस के प्रदर्शन के बाद चर्चा तेज।",
+      "body": "<p>आईपीएल 2026 में मुंबई इंडियंस के कप्तान हार्दिक पांड्या सोशल मीडिया पर चर्चा का विषय बने।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1531418841317-846a46f4b98d?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a5",
+      "slug": "indo-us-relations-nyt-report",
+      "title": "भारत-अमेरिका संबंध: NYT की रिपोर्ट पर चर्चा",
+      "categoryId": "duniya",
+      "excerpt": "द्विपक्षीय संबंधों पर अंतरराष्ट्रीय मीडिया की रिपोर्ट।",
+      "body": "<p>न्यूयॉर्क टाइम्स ने भारत-अमेरिका संबंधों पर विश्लेषण प्रकाशित किया।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a6",
+      "slug": "vinesh-phogat-asian-games-trials",
+      "title": "Asian Games Trials: विनेश फोगाट की एंट्री पर विवाद",
+      "categoryId": "khel",
+      "excerpt": "WFI ने सुप्रीम कोर्ट में याचिका दायर की।",
+      "body": "<p>एशियाई खेल चयन परीक्षणों में विनेश फोगाट की भागीदारी को लेकर विवाद जारी है।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a7",
+      "slug": "sourav-ganguly-biopic-shooting",
+      "title": "कोलकाता में सौरव गांगुली बायोपिक की शूटिंग शुरू",
+      "categoryId": "bollywood",
+      "excerpt": "राजकुमार राव सेट से तस्वीरें वायरल।",
+      "body": "<p>कोलकाता के एडन गार्डens में बायोपिक की शूटिंग शुरू हुई।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    },
+    {
+      "id": "a8",
+      "slug": "neet-paper-leak-meeting",
+      "title": "NEET पेपर लीक: राजनाथ सिंह के घर बड़ी बैठक",
+      "categoryId": "education",
+      "excerpt": "शिक्षा मंत्री और NTA अधिकारी भी मौजूद।",
+      "body": "<p>नीट पेपर लीक मामले पर उच्च स्तरीय बैठक हुई।</p>",
+      "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=225&fit=crop",
+      "featured": false,
+      "publishedAt": "2026-05-28"
+    }
+  ]
+}

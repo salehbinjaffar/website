@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{PAGE_TITLE}}</title>
+  {{META_TAGS}}
+  <link rel="stylesheet" href="{{LAYOUT_CSS}}">
+  <style>
+    :root {
+      --nitv-accent: {{ACCENT_COLOR}};
+      --nitv-accent-dark: {{ACCENT_DARK}};
+    }
+  </style>
+  {{GOOGLE_ADS_HEAD}}
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span>{{DATE_STR}}</span>
+      <ul class="top-links">{{TOP_LINKS}}</ul>
+      <div class="social-links social-icons">{{SOCIAL_LINKS}}</div>
+    </div>
+  </div>
+
+  <div class="breaking-ticker">
+    <span class="breaking-label">{{BREAKING_LABEL}}</span>
+    <div class="breaking-track-wrap">{{BREAKING_TRACK}}</div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="site-branding">
+        {{LOGO_HTML}}
+        <p class="tagline">{{TAGLINE}}</p>
+      </div>
+      <div class="header-actions">
+        <div class="social-icons header-social">{{SOCIAL_LINKS}}</div>
+        {{ADMIN_LINK}}
+      </div>
+    </div>
+    <nav class="primary-nav">
+      <div class="container">
+        <ul class="primary-menu">{{MENU_ITEMS}}</ul>
+      </div>
+    </nav>
+  </header>
+
+  <main class="site-main container">
+    {{AD_SLOT}}
+    {{MAIN_CONTENT}}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-social social-icons">{{SOCIAL_FOOTER}}</div>
+      <nav class="footer-links">{{FOOTER_LINKS}}</nav>
+      <p class="footer-copy">&copy; {{SITE_NAME}}. सर्वाधिकार सुरक्षित।</p>
+    </div>
+  </footer>
+  {{EXTRA_SCRIPTS}}
+</body>
+</html>

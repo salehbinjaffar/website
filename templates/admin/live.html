@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LIVE — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>LIVE चैनल (HLS)</h1>
+      <nav class="admin-nav">
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/live" target="_blank">LIVE देखें</a>
+        <a href="/admin/menu">मेनू</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+    <form method="post" action="/admin/live" class="card">
+      <label><input type="checkbox" name="enabled" {{ENABLED}}> LIVE टैब सक्षम</label>
+      <label>मेनू में टैब का नाम</label>
+      <input name="tabLabel" value="{{TAB_LABEL}}" placeholder="LIVE">
+      <label>पेज शीर्षक</label>
+      <input name="title" value="{{TITLE}}">
+      <label>HLS स्ट्रीम URL (.m3u8)</label>
+      <input name="hlsUrl" value="{{HLS_URL}}" placeholder="https://example.com/live/stream.m3u8">
+      <p class="hint">उदाहरण: Akamai, Cloudflare Stream, या अपने CDN का m3u8 लिंक।</p>
+      <label>पोस्टर इमेज URL (वैकल्पिक)</label>
+      <input name="posterUrl" value="{{POSTER_URL}}" placeholder="https://...jpg">
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+</body>
+</html>

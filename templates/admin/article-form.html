@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{FORM_TITLE}} — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>{{FORM_TITLE}}</h1>
+      <nav class="admin-nav">
+        <a href="/admin/articles">← सभी खबरें</a>
+      </nav>
+    </div>
+    <form method="post" action="{{ACTION}}" class="card" enctype="multipart/form-data">
+      <input type="hidden" name="id" value="{{ID}}">
+      <label>शीर्षक</label>
+      <input name="title" value="{{TITLE}}" required>
+      <label>URL slug (खाली = ऑटो)</label>
+      <input name="slug" value="{{SLUG}}" placeholder="my-news-story">
+      <label>श्रेणी</label>
+      <select name="categoryId">{{CATEGORY_OPTIONS}}</select>
+      <label>संक्षिप्त विवरण</label>
+      <input name="excerpt" value="{{EXCERPT}}">
+      <label>पूरा लेख (पैराग्राफ अलग लाइन से)</label>
+      <textarea name="body" rows="10">{{BODY}}</textarea>
+
+      <h2>खबर की फोटो</h2>
+      <p class="hint">फाइल चुनें (आसान अपलोड) या नीचे लिंक पेस्ट करें।</p>
+      {{IMAGE_PREVIEW}}
+      <label>कंप्यूटर से फोटो अपलोड</label>
+      <input type="file" id="article-image-file" accept="image/jpeg,image/png,image/webp,image/gif">
+      <input type="hidden" name="imageBase64" id="image-base64">
+      <p id="article-image-status" class="upload-status"></p>
+      <label>या इमेज URL</label>
+      <input name="imageUrl" id="image-url" value="{{IMAGE_URL}}" placeholder="https://... या अपलोड के बाद ऑटो भरेगा">
+
+      <label>तारीख</label>
+      <input name="publishedAt" type="date" value="{{PUBLISHED_AT}}">
+      <label><input type="checkbox" name="featured" {{FEATURED}}> मुख्य हीरो खबर (होमपेज बड़ी खबर)</label>
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+  <script src="/public/js/admin-upload.js"></script>
+</body>
+</html>
