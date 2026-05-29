@@ -4,6 +4,8 @@ Hindi news website (Dainik Bhaskar / Amar Ujala style) with **admin panel**, **l
 
 **Repository:** [github.com/salehbinjaffar/website](https://github.com/salehbinjaffar/website)
 
+**For AI agents / handoff:** see **[AI_AGENT_MEMORY.md](AI_AGENT_MEMORY.md)** (chat summary, progress, resolved issues, file map).
+
 ## Features
 
 | Feature | Description |
