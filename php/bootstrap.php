@@ -118,6 +118,21 @@ function nitv_merge_defaults(array $site): array {
         ],
         $site['breaking']['rss'] ?? []
     );
+    $site['youtubeChannel'] = array_merge(
+        [
+            'enabled' => false,
+            'channelName' => '',
+            'channelId' => '',
+            'pageTitle' => 'YouTube — ताज़ा वीडियो',
+            'maxVideos' => 24,
+            'cacheMinutes' => 45,
+            'videos' => [],
+            'fetchedAt' => '',
+            'lastError' => '',
+        ],
+        $site['youtubeChannel'] ?? []
+    );
+    unset($site['youtubeGallery'], $site['youtubePlaylist']);
     return $site;
 }
 
@@ -199,11 +214,33 @@ function nitv_darken(string $hex, int $pct = 12): string {
 
 function nitv_ads(array $site, string $pageType): array {
     $ads = $site['ads'] ?? [];
-    $map = ['home' => 'showOnHome', 'article' => 'showOnArticle', 'privacy' => 'showOnPrivacy', 'contact' => 'showOnContact', 'live' => 'showOnHome', 'category' => 'showOnHome'];
+    $map = ['home' => 'showOnHome', 'article' => 'showOnArticle', 'privacy' => 'showOnPrivacy', 'contact' => 'showOnContact', 'live' => 'showOnHome', 'youtube' => 'showOnHome', 'category' => 'showOnHome'];
     $key = $map[$pageType] ?? 'showOnHome';
     if (empty($ads[$key])) return ['head' => '', 'slot' => ''];
     $slot = !empty($ads['googleBodySlot']) ? '<div class="ad-slot">' . $ads['googleBodySlot'] . '</div>' : '';
     return ['head' => $ads['googleHeadScript'] ?? '', 'slot' => $slot];
+}
+
+function nitv_render_header_banner(array $site): string {
+    $hb = $site['ads']['headerBanner'] ?? [];
+    if (empty($hb['enabled']) || empty($hb['slides'])) {
+        return '';
+    }
+    
+    $slidesHtml = '';
+    foreach ($hb['slides'] as $i => $slide) {
+        $imgUrl = nitv_h(nitv_media_url($slide['imageUrl'] ?? ''));
+        $linkUrl = nitv_h($slide['linkUrl'] ?? '');
+        $activeClass = $i === 0 ? ' is-active' : '';
+        
+        if ($linkUrl) {
+            $slidesHtml .= '<div class="header-ad-slide' . $activeClass . '"><a href="' . $linkUrl . '" target="_blank" rel="noopener noreferrer"><img src="' . $imgUrl . '" alt="Advertisement"></a></div>';
+        } else {
+            $slidesHtml .= '<div class="header-ad-slide' . $activeClass . '"><img src="' . $imgUrl . '" alt="Advertisement"></div>';
+        }
+    }
+    
+    return '<div class="header-ad-slider">' . $slidesHtml . '<div class="header-ad-dots"></div></div>';
 }
 
 function nitv_upload_dir(): string {
@@ -318,6 +355,7 @@ function nitv_layout(array $site, string $content, array $opts = []): string {
         'ADMIN_LINK' => '<a class="btn-primary" href="' . nitv_h(nitv_url('/admin')) . '">संपादन पैनल</a>',
         'GOOGLE_ADS_HEAD' => $ad['head'],
         'AD_SLOT' => $ad['slot'],
+        'HEADER_AD_BANNER' => nitv_render_header_banner($site),
         'EXTRA_SCRIPTS' => str_replace('/public/', nitv_asset('public/'), $opts['extraScripts'] ?? ''),
         'LAYOUT_CSS' => nitv_asset('public/css/style.css'),
     ]);
@@ -379,3 +417,4 @@ function nitv_admin_tpl(string $name, array $vars): string {
 require_once __DIR__ . '/icons.php';
 require_once __DIR__ . '/rss.php';
 require_once __DIR__ . '/home-ui.php';
+require_once __DIR__ . '/youtube.php';

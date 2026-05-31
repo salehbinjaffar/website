@@ -1,0 +1,16 @@
+<section class="youtube-channel-page">
+  <header class="youtube-channel-header">
+    <h1 class="section-title">{{PAGE_HEADING}}</h1>
+    <p class="youtube-channel-label">YouTube चैनल</p>
+    <p class="youtube-channel-name">
+      <a href="{{CHANNEL_URL}}" target="_blank" rel="noopener noreferrer">{{CHANNEL_DISPLAY}}</a>
+    </p>
+    <p class="youtube-channel-hint">नवीनतम वीडियो — थंबनेल पर क्लिक करके YouTube पर देखें।</p>
+  </header>
+  <div class="youtube-carousel-container">
+    <button class="youtube-carousel-nav youtube-carousel-nav-prev" id="youtubeCarouselPrev">‹</button>
+    <div class="youtube-videos-grid" id="youtubeVideosGrid">{{VIDEO_CARDS}}</div>
+    <button class="youtube-carousel-nav youtube-carousel-nav-next" id="youtubeCarouselNext">›</button>
+  </div>
+</section>
+<script src="/public/js/youtube-carousel.js"></script>

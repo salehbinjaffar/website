@@ -45,3 +45,70 @@ form.card label input[type="checkbox"] { width: auto; }
 .btn-secondary { background: #444 !important; margin-left: 0.5rem; }
 .btn-secondary:hover { background: #222 !important; }
 input[type="file"] { padding: 0.35rem 0; }
+
+/* Header banner slide items */
+.slide-item {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.slide-item h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+.slide-item label {
+  margin-top: 0.5rem;
+}
+.remove-slide {
+  background: #b00020 !important;
+  color: #fff !important;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+.remove-slide:hover {
+  background: #8a0018 !important;
+}
+button.secondary {
+  background: #444 !important;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+button.secondary:hover {
+  background: #222 !important;
+}
+
+/* Speed control styling */
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+.speed-control input[type="range"] {
+  flex: 1;
+  min-width: 150px;
+  cursor: pointer;
+}
+.speed-presets {
+  display: flex;
+  gap: 0.5rem;
+}
+.speed-presets button {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin: 0;
+  font-weight: 500;
+}
+.speed-presets button:hover {
+  background: #444;
+}

@@ -9,7 +9,7 @@
 <body>
   <div class="admin-wrap">
     <div class="admin-header">
-      <h1>Google विज्ञापन (AdSense)</h1>
+      <h1>विज्ञापन प्रबंधन</h1>
       <nav class="admin-nav">
         <a href="/admin">डैशबोर्ड</a>
         <a href="/privacy" target="_blank">गोपनीयता पेज</a>
@@ -18,6 +18,7 @@
     </div>
     {{MESSAGE}}
     <form method="post" action="/admin/ads" class="card">
+      <h2>Google विज्ञापन (AdSense)</h2>
       <p class="hint">Google AdSense से <code>&lt;script&gt;</code> और विज्ञापन <code>&lt;ins&gt;</code> कोड यहाँ पेस्ट करें।</p>
       <label>Head में स्क्रिप्ट (AdSense auto ads / loader)</label>
       <textarea name="headScript" rows="6" placeholder="<script async src='https://pagead2.googlesyndication.com/...'></script>">{{HEAD_SCRIPT}}</textarea>
@@ -30,6 +31,86 @@
       <label><input type="checkbox" name="showOnContact" {{SHOW_CONTACT}}> संपर्क पेज</label>
       <button type="submit">सेव करें</button>
     </form>
+
+    <form method="post" action="/admin/ads" class="card" enctype="multipart/form-data" id="headerBannerForm">
+      <h2>हेडर विज्ञापन बैनर (728x90)</h2>
+      <p class="hint">हेडर में 728x90 आकार का विज्ञापन बैनर स्लाइडर जोड़ें।</p>
+      <label><input type="checkbox" name="headerBannerEnabled" {{HEADER_BANNER_ENABLED}}> हेडर बैनर सक्षम करें</label>
+      <div id="headerBannerSlides">
+        {{HEADER_BANNER_SLIDES}}
+      </div>
+      <button type="button" id="addSlideBtn" class="secondary">स्लाइड जोड़ें</button>
+      <button type="submit">सेव करें</button>
+    </form>
   </div>
+  <script>
+    document.getElementById('addSlideBtn').addEventListener('click', function() {
+      const container = document.getElementById('headerBannerSlides');
+      const slideIndex = container.children.length;
+      const slideHtml = `
+        <div class="slide-item">
+          <h4>स्लाइड ${slideIndex + 1}</h4>
+          <label>छवि अपलोड करें (728x90)</label>
+          <input type="file" name="headerBannerSlides[${slideIndex}][imageFile]" accept="image/*" onchange="previewImage(this)">
+          <div class="image-preview" id="preview-${slideIndex}" style="display:none; margin: 0.5rem 0;">
+            <img style="max-width: 100%; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">
+          </div>
+          <label>या छवि URL (वैकल्पिक)</label>
+          <input type="text" name="headerBannerSlides[${slideIndex}][imageUrl]" placeholder="https://example.com/ad-728x90.jpg">
+          <label>लिंक URL (वैकल्पिक)</label>
+          <input type="text" name="headerBannerSlides[${slideIndex}][linkUrl]" placeholder="https://example.com">
+          <button type="button" class="remove-slide" onclick="this.parentElement.remove()">हटाएं</button>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', slideHtml);
+    });
+
+    function previewImage(input) {
+      const previewDiv = input.parentElement.querySelector('.image-preview');
+      const img = previewDiv.querySelector('img');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          img.src = e.target.result;
+          previewDiv.style.display = 'block';
+        }
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        previewDiv.style.display = 'none';
+      }
+    }
+
+    // Convert file uploads to base64 before form submission for Node.js compatibility
+    document.getElementById('headerBannerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const fileInputs = this.querySelectorAll('input[type="file"]');
+      const promises = [];
+      
+      fileInputs.forEach(input => {
+        if (input.files && input.files[0]) {
+          const promise = new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              // Create hidden input for base64 data
+              const base64Input = document.createElement('input');
+              base64Input.type = 'hidden';
+              base64Input.name = input.name.replace('[imageFile]', '[imageBase64]');
+              base64Input.value = e.target.result;
+              input.parentNode.insertBefore(base64Input, input);
+              resolve();
+            };
+            reader.readAsDataURL(input.files[0]);
+          });
+          promises.push(promise);
+        }
+      });
+      
+      await Promise.all(promises);
+      
+      // Submit the form after conversion
+      this.submit();
+    });
+  </script>
 </body>
 </html>

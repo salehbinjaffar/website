@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YouTube चैनल — Admin</title>
+  <link rel="stylesheet" href="/public/css/admin.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <div class="admin-header">
+      <h1>YouTube पेज</h1>
+      <nav class="admin-nav">
+        <a href="/admin">डैशबोर्ड</a>
+        <a href="/youtube" target="_blank">पेज देखें</a>
+        <a href="/admin/logout">लॉगआउट</a>
+      </nav>
+    </div>
+    {{MESSAGE}}
+
+    <form method="post" action="/admin/youtube" class="card">
+      <p class="hint">चैनल नाम दें — <code>@tv.newsindia</code> के लिए <code>tv.newsindia</code> लिखें, या पूरा URL पेस्ट करें।</p>
+      {{STATUS}}
+      <label class="checkbox-row"><input type="checkbox" name="youtubeEnabled" {{ENABLED}}> YouTube पेज चालू करें</label>
+      <label>पेज शीर्षक</label>
+      <input name="pageTitle" value="{{PAGE_TITLE}}" placeholder="YouTube — ताज़ा वीडियो">
+      <label>YouTube चैनल नाम</label>
+      <input name="channelName" value="{{CHANNEL_NAME}}" placeholder="tv.newsindia" required>
+      <p class="hint">बिना @ के। या पूरा URL: <code>https://www.youtube.com/@ChannelName</code></p>
+      <div class="form-row">
+        <label>अधिकतम वीडियो</label>
+        <input name="maxVideos" type="number" min="6" max="50" value="{{MAX_VIDEOS}}">
+        <label>कैश (मिनट)</label>
+        <input name="cacheMinutes" type="number" min="15" max="360" value="{{CACHE_MINUTES}}">
+      </div>
+      <button type="submit" name="refreshYoutube" value="on" class="btn-secondary">अभी वीडियो अपडेट करें</button>
+      <button type="submit">सेव करें</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -26,10 +26,11 @@ const {
   renderCategory,
   renderStaticPage,
   renderLive,
+  renderYouTube,
   renderAdminPage,
   escapeHtml,
 } = require("./lib/render");
-const { applyUploadToBody, applyLogoToSettings } = require("./lib/upload");
+const { applyUploadToBody, applyLogoToSettings, saveHeaderBannerImageFromBase64 } = require("./lib/upload");
 const {
   parseBreakingItems,
   parseSliderItems,
@@ -42,6 +43,12 @@ const {
   rssStatusHtml,
   refreshBreakingRss,
 } = require("./lib/rss");
+const {
+  normalizeChannelInput,
+  refreshYouTubeChannel,
+  ensureYouTubeChannel,
+  youtubeChannelStatusHtml,
+} = require("./lib/youtube");
 
 const PORT = Number(process.env.PORT) || 3000;
 const PUBLIC = path.join(__dirname, "public");
@@ -181,12 +188,36 @@ function menuEditorRows(site, prefix) {
 
 function baseUrl(req) {
   const host = req.headers.host || `localhost:${PORT}`;
-  return `http://${host}`;
+  // Use HTTPS for WhatsApp/OG crawlers
+  return `https://${host}`;
+}
+
+function normalizePath(pathname) {
+  let p = pathname || "/";
+  if (p.length > 1 && p.endsWith("/")) p = p.slice(0, -1);
+  return p;
+}
+
+function renderYouTubeAdmin(site, url) {
+  const y = site.youtubeChannel || {};
+  let msg = url.searchParams.get("saved") ? "<p class='ok'>सेव हो गया</p>" : "";
+  if (url.searchParams.get("refreshed")) {
+    msg += "<p class='ok'>वीडियो अपडेट हो गए।</p>";
+  }
+  return renderAdminPage("youtube.html", {
+    ENABLED: y.enabled ? "checked" : "",
+    PAGE_TITLE: escapeHtml(y.pageTitle || "YouTube — ताज़ा वीडियो"),
+    CHANNEL_NAME: escapeHtml(y.channelName || ""),
+    MAX_VIDEOS: String(y.maxVideos || 24),
+    CACHE_MINUTES: String(y.cacheMinutes || 45),
+    STATUS: youtubeChannelStatusHtml(site),
+    MESSAGE: msg,
+  });
 }
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const pathname = url.pathname;
+  const pathname = normalizePath(url.pathname);
 
   if (pathname.startsWith("/public/") && serveStatic(req, res, pathname)) return;
 
@@ -224,10 +255,42 @@ const server = http.createServer(async (req, res) => {
         );
       }
 
+      if (pathname === "/admin/youtube") {
+        const site = readSite();
+        if (req.method === "GET") {
+          return sendHtml(res, renderYouTubeAdmin(site, url));
+        }
+        if (req.method === "POST") {
+          const body = await parseBody(req);
+          const norm = normalizeChannelInput(body.channelName || "");
+          const prev = site.youtubeChannel || {};
+          site.youtubeChannel = {
+            enabled: body.youtubeEnabled === "on",
+            pageTitle: (body.pageTitle || "YouTube — ताज़ा वीडियो").trim(),
+            channelName: norm.channelName || (body.channelName || "").trim().replace(/^@/, ""),
+            channelId: norm.channelId || prev.channelId || "",
+            maxVideos: Math.min(50, Math.max(6, Number(body.maxVideos) || 24)),
+            cacheMinutes: Math.min(360, Math.max(15, Number(body.cacheMinutes) || 45)),
+            videos: prev.videos || [],
+            fetchedAt: prev.fetchedAt || "",
+            lastError: prev.lastError || "",
+          };
+          delete site.youtubeGallery;
+          delete site.youtubePlaylist;
+          if (site.youtubeChannel.enabled) {
+            await refreshYouTubeChannel(site, { force: body.refreshYoutube === "on" });
+          }
+          writeSite(site);
+          const q = body.refreshYoutube === "on" ? "?saved=1&refreshed=1" : "?saved=1";
+          return redirect(res, "/admin/youtube" + q);
+        }
+      }
+
       if (pathname === "/admin/home-features" && req.method === "GET") {
         const site = readSite();
         const b = site.breaking || {};
         const rss = b.rss || {};
+        const emergency = site.emergencyMessage || {};
         let msg = url.searchParams.get("saved") ? "<p class='ok'>सेव हो गया</p>" : "";
         if (url.searchParams.get("refreshed")) {
           msg += "<p class='ok'>RSS फ़ीड अपडेट हो गई।</p>";
@@ -240,11 +303,16 @@ const server = http.createServer(async (req, res) => {
             RSS_ENABLED: rss.enabled ? "checked" : "",
             RSS_MAX_ITEMS: String(rss.maxItems || 12),
             RSS_CACHE_MINUTES: String(rss.cacheMinutes || 20),
+            RSS_SPEED: String(rss.speed || 35),
             RSS_MERGE_MANUAL: rss.mergeManual ? "checked" : "",
             RSS_FEED_ROWS: rssFeedEditorRows(site),
             RSS_STATUS: rssStatusHtml(site),
             BREAKING_ROWS: breakingEditorRows(site),
             SLIDER_ROWS: sliderEditorRows(site),
+            EMERGENCY_ENABLED: emergency.enabled ? "checked" : "",
+            EMERGENCY_TEXT: escapeHtml(emergency.text || ""),
+            EMERGENCY_URL: escapeHtml(emergency.url || ""),
+            EMERGENCY_SPEED: String(emergency.speed || 20),
             MESSAGE: msg,
           })
         );
@@ -263,12 +331,19 @@ const server = http.createServer(async (req, res) => {
             enabled: body.rssEnabled === "on",
             maxItems: Math.min(30, Math.max(3, Number(body.rssMaxItems) || 12)),
             cacheMinutes: Math.min(360, Math.max(5, Number(body.rssCacheMinutes) || 20)),
+            speed: Math.min(120, Math.max(15, Number(body.rssSpeed) || 35)),
             mergeManual: body.rssMergeManual === "on",
             feeds: parseRssFeedUrls(body),
             items: rssPrev.items || [],
             fetchedAt: rssPrev.fetchedAt || "",
             lastError: rssPrev.lastError || "",
           },
+        };
+        site.emergencyMessage = {
+          enabled: body.emergencyEnabled === "on",
+          text: (body.emergencyText || "").trim(),
+          url: (body.emergencyUrl || "").trim(),
+          speed: Math.min(60, Math.max(10, Number(body.emergencySpeed) || 20)),
         };
         site.slider = parseSliderItems(body);
         if (site.breaking.rss.enabled) {
@@ -438,6 +513,29 @@ const server = http.createServer(async (req, res) => {
       if (pathname === "/admin/ads" && req.method === "GET") {
         const site = readSite();
         const ads = site.ads;
+        const hb = ads.headerBanner || {};
+        let slidesHtml = "";
+        (hb.slides || []).forEach((slide, i) => {
+          slidesHtml += `<div class="slide-item">
+              <h4>स्लाइड ${i + 1}</h4>
+              <label>छवि अपलोड करें (728x90)</label>
+              <input type="file" name="headerBannerSlides[${i}][imageFile]" accept="image/*" onchange="previewImage(this)">
+              <div class="image-preview" id="preview-${i}" style="display:none; margin: 0.5rem 0;">
+                <img style="max-width: 100%; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">
+              </div>`;
+          if (slide.imageUrl) {
+            slidesHtml += `<div style="margin: 0.5rem 0;">
+                <small>वर्तमान छवि:</small><br>
+                <img src="${escapeHtml(slide.imageUrl)}" style="max-width: 100%; max-height: 60px; border: 1px solid #ddd; border-radius: 4px; margin-top: 0.25rem;">
+              </div>`;
+          }
+          slidesHtml += `<label>या छवि URL (वैकल्पिक)</label>
+              <input type="text" name="headerBannerSlides[${i}][imageUrl]" value="${escapeHtml(slide.imageUrl)}" placeholder="https://example.com/ad-728x90.jpg">
+              <label>लिंक URL (वैकल्पिक)</label>
+              <input type="text" name="headerBannerSlides[${i}][linkUrl]" value="${escapeHtml(slide.linkUrl || "")}" placeholder="https://example.com">
+              <button type="button" class="remove-slide" onclick="this.parentElement.remove()">हटाएं</button>
+            </div>`;
+        });
         return sendHtml(
           res,
           renderAdminPage("ads.html", {
@@ -447,6 +545,8 @@ const server = http.createServer(async (req, res) => {
             SHOW_ARTICLE: ads.showOnArticle ? "checked" : "",
             SHOW_PRIVACY: ads.showOnPrivacy ? "checked" : "",
             SHOW_CONTACT: ads.showOnContact ? "checked" : "",
+            HEADER_BANNER_ENABLED: hb.enabled ? "checked" : "",
+            HEADER_BANNER_SLIDES: slidesHtml,
             MESSAGE: url.searchParams.get("saved") ? "<p class='ok'>सेव हो गया</p>" : "",
           })
         );
@@ -455,6 +555,41 @@ const server = http.createServer(async (req, res) => {
       if (pathname === "/admin/ads" && req.method === "POST") {
         const site = readSite();
         const body = await parseBody(req);
+        const hb = site.ads?.headerBanner || {};
+        
+        // Parse header banner slides
+        const headerBannerSlides = [];
+        Object.keys(body).forEach((key) => {
+          if (key.startsWith("headerBannerSlides[") && key.includes("][imageUrl]")) {
+            const match = key.match(/headerBannerSlides\[(\d+)\]\[imageUrl\]/);
+            if (match) {
+              const index = parseInt(match[1]);
+              let imageUrl = "";
+              
+              // Handle base64 upload
+              if (body[`headerBannerSlides[${index}][imageBase64]`] && body[`headerBannerSlides[${index}][imageBase64]`].length > 20) {
+                const result = saveHeaderBannerImageFromBase64(body[`headerBannerSlides[${index}][imageBase64]`]);
+                if (result.url) imageUrl = result.url;
+              }
+              
+              // Use URL if no upload
+              if (!imageUrl && body[`headerBannerSlides[${index}][imageUrl]`]) {
+                imageUrl = body[`headerBannerSlides[${index}][imageUrl]`].trim();
+              }
+              
+              // Keep existing if neither
+              if (!imageUrl && hb.slides && hb.slides[index] && hb.slides[index].imageUrl) {
+                imageUrl = hb.slides[index].imageUrl;
+              }
+              
+              const linkUrl = body[`headerBannerSlides[${index}][linkUrl]`] || "";
+              if (imageUrl) {
+                headerBannerSlides.push({ imageUrl: imageUrl.trim(), linkUrl: linkUrl.trim() });
+              }
+            }
+          }
+        });
+
         site.ads = {
           googleHeadScript: body.headScript || "",
           googleBodySlot: body.bodySlot || "",
@@ -462,6 +597,10 @@ const server = http.createServer(async (req, res) => {
           showOnArticle: body.showOnArticle === "on",
           showOnPrivacy: body.showOnPrivacy === "on",
           showOnContact: body.showOnContact === "on",
+          headerBanner: {
+            enabled: body.headerBannerEnabled === "on",
+            slides: headerBannerSlides,
+          },
         };
         writeSite(site);
         return redirect(res, "/admin/ads?saved=1");
@@ -492,6 +631,7 @@ const server = http.createServer(async (req, res) => {
             BODY: "",
             IMAGE_URL: "",
             PUBLISHED_AT: new Date().toISOString().slice(0, 10),
+            TAGS: "",
             FEATURED: "",
             IMAGE_PREVIEW: `<img id="article-image-preview" class="upload-preview" style="display:none" alt="">`,
             CATEGORY_OPTIONS: categoryOptions(site, site.categories[0]?.id),
@@ -518,6 +658,7 @@ const server = http.createServer(async (req, res) => {
               ? `<img id="article-image-preview" class="upload-preview" src="${escapeHtml(article.imageUrl)}" alt="">`
               : `<img id="article-image-preview" class="upload-preview" style="display:none" alt="">`,
             PUBLISHED_AT: article.publishedAt,
+            TAGS: article.tags || "",
             FEATURED: article.featured ? "checked" : "",
             CATEGORY_OPTIONS: categoryOptions(site, article.categoryId),
           })
@@ -545,6 +686,7 @@ const server = http.createServer(async (req, res) => {
           imageUrl,
           publishedAt: body.publishedAt,
           featured: body.featured === "on",
+          tags: (body.tags || "").split(",").map(t => t.trim()).filter(t => t),
         };
         if (payload.featured) {
           site.articles.forEach((a) => {
@@ -585,6 +727,23 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname === "/live") {
       return sendHtml(res, renderLive(site));
+    }
+
+    if (pathname === "/youtube" || pathname === "/youtube.html") {
+      let siteData = readSite();
+      if (siteData.youtubeChannel?.enabled) {
+        const stamp =
+          (siteData.youtubeChannel.fetchedAt || "") +
+          "|" +
+          (siteData.youtubeChannel.videos || []).length;
+        await ensureYouTubeChannel(siteData, {});
+        const stampAfter =
+          (siteData.youtubeChannel.fetchedAt || "") +
+          "|" +
+          (siteData.youtubeChannel.videos || []).length;
+        if (stamp !== stampAfter) writeSite(siteData);
+      }
+      return sendHtml(res, renderYouTube(siteData));
     }
 
     if (pathname.startsWith("/article/")) {

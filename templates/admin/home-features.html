@@ -29,6 +29,16 @@
         <label>कैश (मिनट)</label>
         <input name="rssCacheMinutes" type="number" min="5" max="360" value="{{RSS_CACHE_MINUTES}}">
       </div>
+      <label>स्क्रॉल गति (सेकंड, कम = तेज)</label>
+      <div class="speed-control">
+        <input name="rssSpeed" type="range" min="15" max="120" value="{{RSS_SPEED}}" id="rssSpeedRange" oninput="document.getElementById('rssSpeedNumber').value = this.value">
+        <input name="rssSpeed" type="number" min="15" max="120" value="{{RSS_SPEED}}" id="rssSpeedNumber" oninput="document.getElementById('rssSpeedRange').value = this.value" style="width: 80px;">
+        <span class="speed-presets">
+          <button type="button" onclick="document.getElementById('rssSpeedRange').value = 15; document.getElementById('rssSpeedNumber').value = 15;">तेज</button>
+          <button type="button" onclick="document.getElementById('rssSpeedRange').value = 35; document.getElementById('rssSpeedNumber').value = 35;">मध्यम</button>
+          <button type="button" onclick="document.getElementById('rssSpeedRange').value = 60; document.getElementById('rssSpeedNumber').value = 60;">धीमा</button>
+        </span>
+      </div>
       <label class="checkbox-row"><input type="checkbox" name="rssMergeManual" {{RSS_MERGE_MANUAL}}> RSS के साथ मैन्युअल खबरें भी जोड़ें</label>
       <table id="rss-feed-table">
         <thead><tr><th>RSS फ़ीड URL</th><th></th></tr></thead>
@@ -37,12 +47,38 @@
       <button type="button" data-add-rss>+ RSS फ़ीड जोड़ें</button>
       <button type="submit" name="refreshRss" value="on" class="btn-secondary">अभी RSS अपडेट करें</button>
 
+      <h2>आपातकालीन संदेश (Emergency Message)</h2>
+      <p class="hint">यह संदेश होमपेज पर ब्रेकिंग टिकर के ऊपर एक विशेष बैनर के रूप में प्रदर्शित होगा। आपातकालीन घोषणाओं के लिए उपयोग करें।</p>
+      <label class="checkbox-row"><input type="checkbox" name="emergencyEnabled" {{EMERGENCY_ENABLED}}> आपातकालीन संदेश सक्षम करें</label>
+      <label>आपातकालीन संदेश टेक्स्ट</label>
+      <input name="emergencyText" value="{{EMERGENCY_TEXT}}" placeholder="आपातकालीन संदेश यहाँ लिखें...">
+      <label>लिंक URL (वैकल्पिक)</label>
+      <input name="emergencyUrl" value="{{EMERGENCY_URL}}" placeholder="https://example.com">
+      <label>स्क्रॉल गति (सेकंड, कम = तेज)</label>
+      <div class="speed-control">
+        <input name="emergencySpeed" type="range" min="10" max="60" value="{{EMERGENCY_SPEED}}" id="emergencySpeedRange" oninput="document.getElementById('emergencySpeedNumber').value = this.value">
+        <input name="emergencySpeed" type="number" min="10" max="60" value="{{EMERGENCY_SPEED}}" id="emergencySpeedNumber" oninput="document.getElementById('emergencySpeedRange').value = this.value" style="width: 80px;">
+        <span class="speed-presets">
+          <button type="button" onclick="document.getElementById('emergencySpeedRange').value = 10; document.getElementById('emergencySpeedNumber').value = 10;">तेज</button>
+          <button type="button" onclick="document.getElementById('emergencySpeedRange').value = 20; document.getElementById('emergencySpeedNumber').value = 20;">मध्यम</button>
+          <button type="button" onclick="document.getElementById('emergencySpeedRange').value = 30; document.getElementById('emergencySpeedNumber').value = 30;">धीमा</button>
+        </span>
+      </div>
+
       <h2>ब्रेकिंग टिकर (मैन्युअल)</h2>
       <p class="hint">RSS बंद होने पर या “मर्ज” चेक होने पर ये खबरें दिखेंगी।</p>
       <label>लेबल (ब्रेकिंग)</label>
       <input name="breakingLabel" value="{{BREAKING_LABEL}}">
       <label>स्क्रॉल गति (सेकंड, कम = तेज)</label>
-      <input name="breakingSpeed" type="number" min="15" max="120" value="{{BREAKING_SPEED}}">
+      <div class="speed-control">
+        <input name="breakingSpeed" type="range" min="15" max="120" value="{{BREAKING_SPEED}}" id="breakingSpeedRange" oninput="document.getElementById('breakingSpeedNumber').value = this.value">
+        <input name="breakingSpeed" type="number" min="15" max="120" value="{{BREAKING_SPEED}}" id="breakingSpeedNumber" oninput="document.getElementById('breakingSpeedRange').value = this.value" style="width: 80px;">
+        <span class="speed-presets">
+          <button type="button" onclick="document.getElementById('breakingSpeedRange').value = 15; document.getElementById('breakingSpeedNumber').value = 15;">तेज</button>
+          <button type="button" onclick="document.getElementById('breakingSpeedRange').value = 35; document.getElementById('breakingSpeedNumber').value = 35;">मध्यम</button>
+          <button type="button" onclick="document.getElementById('breakingSpeedRange').value = 60; document.getElementById('breakingSpeedNumber').value = 60;">धीमा</button>
+        </span>
+      </div>
       <table id="breaking-table">
         <thead><tr><th>खबर टेक्स्ट</th><th>लिंक URL</th><th></th></tr></thead>
         <tbody>{{BREAKING_ROWS}}</tbody>

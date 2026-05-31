@@ -82,6 +82,47 @@ if (str_starts_with($path, '/admin')) {
 
     nitv_require_admin();
 
+    if ($path === '/admin/youtube') {
+        if ($method === 'POST') {
+            $norm = nitv_normalize_channel_input($_POST['channelName'] ?? '');
+            $prev = $site['youtubeChannel'] ?? [];
+            $site['youtubeChannel'] = [
+                'enabled' => isset($_POST['youtubeEnabled']),
+                'pageTitle' => trim($_POST['pageTitle'] ?? 'YouTube — ताज़ा वीडियो') ?: 'YouTube — ताज़ा वीडियो',
+                'channelName' => $norm['channelName'] ?: trim(ltrim($_POST['channelName'] ?? '', '@')),
+                'channelId' => $norm['channelId'] ?: ($prev['channelId'] ?? ''),
+                'maxVideos' => min(50, max(6, (int)($_POST['maxVideos'] ?? 24))),
+                'cacheMinutes' => min(360, max(15, (int)($_POST['cacheMinutes'] ?? 45))),
+                'videos' => $prev['videos'] ?? [],
+                'fetchedAt' => $prev['fetchedAt'] ?? '',
+                'lastError' => $prev['lastError'] ?? '',
+            ];
+            unset($site['youtubeGallery'], $site['youtubePlaylist']);
+            if (!empty($site['youtubeChannel']['enabled'])) {
+                nitv_refresh_youtube_channel($site, isset($_POST['refreshYoutube']));
+            }
+            nitv_write_site($site);
+            $q = isset($_POST['refreshYoutube']) ? '?saved=1&refreshed=1' : '?saved=1';
+            header('Location: ' . nitv_url('/admin/youtube' . $q));
+            exit;
+        }
+        $y = $site['youtubeChannel'] ?? [];
+        $msg = isset($_GET['saved']) ? "<p class='ok'>सेव हो गया</p>" : '';
+        if (isset($_GET['refreshed'])) {
+            $msg .= "<p class='ok'>वीडियो अपडेट हो गए।</p>";
+        }
+        echo nitv_admin_tpl('youtube.html', [
+            'ENABLED' => !empty($y['enabled']) ? 'checked' : '',
+            'PAGE_TITLE' => nitv_h($y['pageTitle'] ?? 'YouTube — ताज़ा वीडियो'),
+            'CHANNEL_NAME' => nitv_h($y['channelName'] ?? ''),
+            'MAX_VIDEOS' => (string)($y['maxVideos'] ?? 24),
+            'CACHE_MINUTES' => (string)($y['cacheMinutes'] ?? 45),
+            'STATUS' => nitv_youtube_channel_status_html($site),
+            'MESSAGE' => $msg,
+        ]);
+        exit;
+    }
+
     if ($path === '/admin' && $method === 'GET') {
         echo nitv_admin_tpl('dashboard.html', [
             'SITE_NAME' => $site['settings']['siteName'],
@@ -165,6 +206,7 @@ if (str_starts_with($path, '/admin')) {
                 ],
             ];
             $site['slider'] = nitv_parse_slider_post($_POST);
+            unset($site['youtubeGallery'], $site['youtubePlaylist']);
             if (!empty($site['breaking']['rss']['enabled'])) {
                 nitv_rss_refresh($site, isset($_POST['refreshRss']));
             }
@@ -271,6 +313,44 @@ if (str_starts_with($path, '/admin')) {
 
     if ($path === '/admin/ads') {
         if ($method === 'POST') {
+            // Parse header banner slides
+            $headerBannerSlides = [];
+            if (isset($_POST['headerBannerSlides']) && is_array($_POST['headerBannerSlides'])) {
+                foreach ($_POST['headerBannerSlides'] as $i => $slide) {
+                    $imageUrl = '';
+                    // Handle file upload
+                    if (isset($_FILES['headerBannerSlides']['name'][$i]['imageFile']) && 
+                        !empty($_FILES['headerBannerSlides']['name'][$i]['imageFile'])) {
+                        $file = [
+                            'name' => $_FILES['headerBannerSlides']['name'][$i]['imageFile'],
+                            'type' => $_FILES['headerBannerSlides']['type'][$i]['imageFile'],
+                            'tmp_name' => $_FILES['headerBannerSlides']['tmp_name'][$i]['imageFile'],
+                            'error' => $_FILES['headerBannerSlides']['error'][$i]['imageFile'],
+                            'size' => $_FILES['headerBannerSlides']['size'][$i]['imageFile'],
+                        ];
+                        $uploaded = nitv_save_uploaded_file($file, 'header-banner/' . uniqid('hb_'));
+                        if ($uploaded) {
+                            $imageUrl = $uploaded;
+                        }
+                    }
+                    // Use URL if no file uploaded
+                    if (empty($imageUrl) && !empty($slide['imageUrl'])) {
+                        $imageUrl = trim($slide['imageUrl']);
+                    }
+                    // Keep existing URL if neither file nor new URL provided
+                    if (empty($imageUrl) && isset($hb['slides'][$i]['imageUrl'])) {
+                        $imageUrl = $hb['slides'][$i]['imageUrl'];
+                    }
+                    
+                    if (!empty($imageUrl)) {
+                        $headerBannerSlides[] = [
+                            'imageUrl' => $imageUrl,
+                            'linkUrl' => trim($slide['linkUrl'] ?? ''),
+                        ];
+                    }
+                }
+            }
+
             $site['ads'] = [
                 'googleHeadScript' => $_POST['headScript'] ?? '',
                 'googleBodySlot' => $_POST['bodySlot'] ?? '',
@@ -278,12 +358,39 @@ if (str_starts_with($path, '/admin')) {
                 'showOnArticle' => isset($_POST['showOnArticle']),
                 'showOnPrivacy' => isset($_POST['showOnPrivacy']),
                 'showOnContact' => isset($_POST['showOnContact']),
+                'headerBanner' => [
+                    'enabled' => isset($_POST['headerBannerEnabled']),
+                    'slides' => $headerBannerSlides,
+                ],
             ];
             nitv_write_site($site);
             header('Location: ' . nitv_url('/admin/ads?saved=1'));
             exit;
         }
         $a = $site['ads'];
+        $hb = $a['headerBanner'] ?? [];
+        $slidesHtml = '';
+        foreach ($hb['slides'] ?? [] as $i => $slide) {
+            $slidesHtml .= '<div class="slide-item">
+              <h4>स्लाइड ' . ($i + 1) . '</h4>
+              <label>छवि अपलोड करें (728x90)</label>
+              <input type="file" name="headerBannerSlides[' . $i . '][imageFile]" accept="image/*" onchange="previewImage(this)">
+              <div class="image-preview" id="preview-' . $i . '" style="display:none; margin: 0.5rem 0;">
+                <img style="max-width: 100%; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;">
+              </div>';
+            if (!empty($slide['imageUrl'])) {
+                $slidesHtml .= '<div style="margin: 0.5rem 0;">
+                  <small>वर्तमान छवि:</small><br>
+                  <img src="' . nitv_h(nitv_media_url($slide['imageUrl'])) . '" style="max-width: 100%; max-height: 60px; border: 1px solid #ddd; border-radius: 4px; margin-top: 0.25rem;">
+                </div>';
+            }
+            $slidesHtml .= '<label>या छवि URL (वैकल्पिक)</label>
+              <input type="text" name="headerBannerSlides[' . $i . '][imageUrl]" value="' . nitv_h($slide['imageUrl']) . '" placeholder="https://example.com/ad-728x90.jpg">
+              <label>लिंक URL (वैकल्पिक)</label>
+              <input type="text" name="headerBannerSlides[' . $i . '][linkUrl]" value="' . nitv_h($slide['linkUrl'] ?? '') . '" placeholder="https://example.com">
+              <button type="button" class="remove-slide" onclick="this.parentElement.remove()">हटाएं</button>
+            </div>';
+        }
         echo nitv_admin_tpl('ads.html', [
             'HEAD_SCRIPT' => htmlspecialchars($a['googleHeadScript'] ?? '', ENT_NOQUOTES),
             'BODY_SLOT' => htmlspecialchars($a['googleBodySlot'] ?? '', ENT_NOQUOTES),
@@ -291,6 +398,8 @@ if (str_starts_with($path, '/admin')) {
             'SHOW_ARTICLE' => !empty($a['showOnArticle']) ? 'checked' : '',
             'SHOW_PRIVACY' => !empty($a['showOnPrivacy']) ? 'checked' : '',
             'SHOW_CONTACT' => !empty($a['showOnContact']) ? 'checked' : '',
+            'HEADER_BANNER_ENABLED' => !empty($hb['enabled']) ? 'checked' : '',
+            'HEADER_BANNER_SLIDES' => $slidesHtml,
             'MESSAGE' => isset($_GET['saved']) ? "<p class='ok'>सेव हो गया</p>" : '',
         ]);
         exit;
@@ -407,7 +516,28 @@ if ($path === '/' || $path === '/index.html') {
     foreach (array_slice($articles, 0, 6) as $a) {
         $trend .= '<li><a href="' . nitv_h(nitv_url('/article/' . $a['slug'])) . '">' . nitv_h($a['title']) . '</a></li>';
     }
-    $page = nitv_replace(nitv_tpl('home.html'), ['SLIDER' => $sliderHtml, 'SIDE_LIST' => $side, 'NEWS_GRID' => $grid, 'TRENDING' => $trend]);
+    $yt = nitv_get_youtube_channel($site);
+    $youtubeSection = '';
+    if ($yt['enabled'] && !empty($yt['videos'])) {
+        $display = $yt['channelName'] !== '' ? '@' . $yt['channelName'] : 'YouTube';
+        $videoCards = nitv_render_youtube_video_cards(array_slice($yt['videos'], 0, 6));
+        $youtubeSection = '<section class="youtube-section"><header class="youtube-section-header">
+          <h2 class="section-title">' . nitv_h($yt['pageTitle']) . '</h2>
+          <p class="youtube-channel-label">YouTube चैनल</p>
+          <p class="youtube-channel-name">
+            <a href="' . nitv_h(nitv_channel_public_url($yt)) . '" target="_blank" rel="noopener noreferrer">' . nitv_h($display) . '</a>
+          </p>
+          <p class="youtube-channel-hint">नवीनतम वीडियो — थंबनेल पर क्लिक करके YouTube पर देखें।</p>
+        </header>
+        <div class="youtube-videos-grid">' . $videoCards . '</div></section>';
+    }
+    $page = nitv_replace(nitv_tpl('home.html'), [
+        'SLIDER' => $sliderHtml,
+        'SIDE_LIST' => $side,
+        'YOUTUBE_SECTION' => $youtubeSection,
+        'NEWS_GRID' => $grid,
+        'TRENDING' => $trend,
+    ]);
     echo nitv_layout($site, $page, [
         'title' => $site['settings']['siteName'],
         'pageType' => 'home',
@@ -437,6 +567,25 @@ if ($path === '/live') {
         ? '<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script><script src="' . nitv_h(nitv_asset('public/js/live.js')) . '"></script>'
         : '';
     echo nitv_layout($site, $page, ['title' => 'LIVE', 'activeUrl' => '/live', 'pageType' => 'live', 'extraScripts' => $scripts]);
+    exit;
+}
+
+if ($path === '/youtube' || $path === '/youtube.html') {
+    if (!empty($site['youtubeChannel']['enabled'])) {
+        $stamp = ($site['youtubeChannel']['fetchedAt'] ?? '') . '|' . count($site['youtubeChannel']['videos'] ?? []);
+        nitv_ensure_youtube_channel($site, false);
+        $stampAfter = ($site['youtubeChannel']['fetchedAt'] ?? '') . '|' . count($site['youtubeChannel']['videos'] ?? []);
+        if ($stamp !== $stampAfter) {
+            nitv_write_site($site);
+        }
+    }
+    $yt = nitv_get_youtube_channel($site);
+    $page = nitv_render_youtube_page($site);
+    echo nitv_layout($site, $page, [
+        'title' => $yt['pageTitle'] . ' — ' . $site['settings']['siteName'],
+        'activeUrl' => '/youtube',
+        'pageType' => 'youtube',
+    ]);
     exit;
 }
 

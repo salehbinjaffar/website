@@ -1,8 +1,8 @@
 {
   "settings": {
     "siteName": "News India TV",
-    "tagline": "हिंदी न्यूज़ — ताज़ा और विश्वसनीय समाचार",
-    "breakingText": "ताज़ा खबर: News India TV पर पाएं देश-दुनिया, खेल और मनोरंजन की हर बड़ी खबर",
+    "tagline": "",
+    "breakingText": "",
     "accentColor": "#c41e3a",
     "logoUrl": "",
     "social": {
@@ -15,24 +15,76 @@
   },
   "breaking": {
     "label": "ब्रेकिंग",
-    "speed": 32,
+    "speed": 15,
+    "items": [
+      {
+        "text": "News India TV लाइव — अब देखें ब्रेकिंग न्यूज़",
+        "url": "/live"
+      },
+      {
+        "text": "ताज़ा खबर: देश-दुनिया, खेल, बॉलीवुड और व्यापार",
+        "url": "/"
+      },
+      {
+        "text": "मौसम अपडेट: देश भर में बारिश और ठंडी हवाएं",
+        "url": "/category/city"
+      }
+    ],
     "rss": {
       "enabled": false,
       "maxItems": 12,
       "cacheMinutes": 20,
+      "speed": 35,
       "mergeManual": false,
       "feeds": [],
       "items": [],
       "fetchedAt": "",
       "lastError": ""
-    },
-    "items": [
-      { "text": "News India TV लाइव — अब देखें ब्रेकिंग न्यूज़", "url": "/live" },
-      { "text": "ताज़ा खबर: देश-दुनिया, खेल, बॉलीवुड और व्यापार", "url": "/" },
-      { "text": "मौसम अपडेट: देश भर में बारिश और ठंडी हवाएं", "url": "/category/city" }
-    ]
+    }
   },
   "slider": [],
+  "youtubeChannel": {
+    "enabled": true,
+    "channelName": "tv.newsindia",
+    "channelId": "UCcMlc9Vn1_N0L5GcDj4su3g",
+    "pageTitle": "YouTube — ताज़ा वीडियो",
+    "maxVideos": 6,
+    "cacheMinutes": 15,
+    "videos": [
+      {
+        "title": "Kanpur में साइबर फ्रॉड गैंग का बड़ा भंडाफोड़। प्रिएक्टिवेटेड सिम साइबर ठगों को कराते थे उपलब्ध।",
+        "url": "https://www.youtube.com/watch?v=JFmjWROzaQA",
+        "videoId": "JFmjWROzaQA"
+      },
+      {
+        "title": "Jabalpur के डुमना एयरपोर्ट से लगे गांव में खुदाई में मिला जिंदा बम",
+        "url": "https://www.youtube.com/watch?v=YVU4MIV3yMk",
+        "videoId": "YVU4MIV3yMk"
+      },
+      {
+        "title": "Tikamgarh कुड़याला में अवैध शराब के विरोध में ग्रामीणों का हंगामा",
+        "url": "https://www.youtube.com/watch?v=piIa_0gKOi0",
+        "videoId": "piIa_0gKOi0"
+      },
+      {
+        "title": "Jabalpur आधी रात को मौत का तांडव: जब आग की लपटों के बीच छप्पर फाड़कर बाहर निकला परिवार",
+        "url": "https://www.youtube.com/watch?v=_OEkVGYEwxk",
+        "videoId": "_OEkVGYEwxk"
+      },
+      {
+        "title": "Lucknow नगर निगम का दिखावा या बारिश से पहले काम की तैईयारी....",
+        "url": "https://www.youtube.com/watch?v=PYyjssp-AT4",
+        "videoId": "PYyjssp-AT4"
+      },
+      {
+        "title": "Jhansi गल्ला मंडी के पास ड्यूटी पर तैनात होमगार्ड को 3-4 युवकों ने सड़क पर घेरकर कई थप्पड़ जड़ दिए",
+        "url": "https://www.youtube.com/watch?v=MomZHgx6Ucg",
+        "videoId": "MomZHgx6Ucg"
+      }
+    ],
+    "fetchedAt": "2026-05-30T21:32:01.954Z",
+    "lastError": ""
+  },
   "pages": {
     "contact": {
       "title": "संपर्क करें",
@@ -53,10 +105,14 @@
   "ads": {
     "googleHeadScript": "",
     "googleBodySlot": "",
-    "showOnHome": true,
-    "showOnArticle": true,
-    "showOnPrivacy": true,
-    "showOnContact": false
+    "showOnHome": false,
+    "showOnArticle": false,
+    "showOnPrivacy": false,
+    "showOnContact": false,
+    "headerBanner": {
+      "enabled": false,
+      "slides": []
+    }
   },
   "auth": {
     "username": "admin",
@@ -71,7 +127,7 @@
     },
     {
       "label": "वीडियो",
-      "url": "#"
+      "url": "/@tv.newsindia"
     },
     {
       "label": "फोटो",
@@ -160,96 +216,93 @@
     {
       "id": "city",
       "name": "शहर और राज्य"
+    },
+    {
+      "id": "id_mpswjze4r5vnst",
+      "name": "भारत निर्माण"
     }
   ],
   "articles": [
     {
-      "id": "a1",
-      "slug": "pm-modi-hails-indian-wrestlers-u23-asian-championship",
-      "title": "U23 Wrestling: एशियाई चैंपियनशिप में भारतीय पहलवानों की जीत पर PM Modi ने की तारीफ",
-      "categoryId": "khel",
-      "excerpt": "प्रधानमंत्री ने सोशल मीडिया पर पुरुष और महिला पहलवानों को जीत की बधाई दी।",
-      "body": "<p>एशियाई कुश्ती चैंपियनशिप में भारतीय पहलवानों के शानदार प्रदर्शन की प्रधानमंत्री नरेंद्र मोदी ने गुरुवार को जमकर तारीफ की। उन्होंने सोशल मीडिया प्लेटफॉर्म एक्स पर पुरुष और महिला पहलवानों को जीत की बधाई दी।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&h=506&fit=crop",
-      "featured": true,
-      "publishedAt": "2026-05-28"
+      "id": "id_mpswnod1jcuqzs",
+      "slug": "6",
+      "title": "हमीरपुर में निर्माणाधीन पुल गिरा, 6 की मौत",
+      "categoryId": "id_mpswjze4r5vnst",
+      "excerpt": "",
+      "body": "<p></p>",
+      "imageUrl": "https://bharatnirmannews.com/wp-content/uploads/2026/05/bnghnghn-ghbgngbgbgb.png",
+      "publishedAt": "2026-05-30",
+      "featured": false,
+      "tags": [
+        "भारत निर्माण",
+        "समाचार"
+      ]
     },
     {
-      "id": "a2",
-      "slug": "gujarat-student-canada-tragedy",
-      "title": "कनाडा में गुजरात की छात्रा की हत्या: परिवार को 12 दिन बाद मिली जानकारी",
-      "categoryId": "desh",
-      "excerpt": "परिवार ने न्याय की गुहार लगाई है।",
-      "body": "<p>कनाडा में रह रही एक गुजराती छात्रा की हत्या के मामले में परिवार को 12 दिन बाद जानकारी मिली।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=400&h=225&fit=crop",
+      "id": "id_mpswnm9xwpng67",
+      "slug": "",
+      "title": "नशे में धुत वार्ड ब्वॉय का वीडियो वायरल",
+      "categoryId": "id_mpswjze4r5vnst",
+      "excerpt": "",
+      "body": "<p></p>",
+      "imageUrl": "https://bharatnirmannews.com/wp-content/uploads/2026/05/binngb.png",
+      "publishedAt": "2026-05-30",
       "featured": false,
-      "publishedAt": "2026-05-28"
+      "tags": [
+        "भारत निर्माण",
+        "समाचार"
+      ]
     },
     {
-      "id": "a3",
-      "slug": "delhi-ncr-rain-relief",
-      "title": "दिल्ली-NCR में बारिश, गर्मी से मिली राहत; IMD ने जारी किया अलर्ट",
-      "categoryId": "city",
-      "excerpt": "कई इलाकों में बारिश से लोगों को राहत मिली।",
-      "body": "<p>दिल्ली-NCR के कई हिस्सों में बारिश हुई और मौसम में ठंडक आई।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1527482791131-9883f35f49f3?w=400&h=225&fit=crop",
+      "id": "id_mpswnk9kj72u4o",
+      "slug": "",
+      "title": "बेकाबू स्कॉर्पियो की टक्कर से युवक की मौत",
+      "categoryId": "id_mpswjze4r5vnst",
+      "excerpt": "",
+      "body": "<p></p>",
+      "imageUrl": "https://bharatnirmannews.com/wp-content/uploads/2026/05/hnjhjhmnynh.png",
+      "publishedAt": "2026-05-30",
       "featured": false,
-      "publishedAt": "2026-05-28"
+      "tags": [
+        "भारत निर्माण",
+        "समाचार"
+      ]
     },
     {
-      "id": "a4",
-      "slug": "ipl-2026-hardik-pandya-social-media",
-      "title": "IPL 2026: हार्दिक पांड्या पर सोशल मीडिया पर चर्चा",
-      "categoryId": "cricket",
-      "excerpt": "मुंबई इंडियंस के प्रदर्शन के बाद चर्चा तेज।",
-      "body": "<p>आईपीएल 2026 में मुंबई इंडियंस के कप्तान हार्दिक पांड्या सोशल मीडिया पर चर्चा का विषय बने।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1531418841317-846a46f4b98d?w=400&h=225&fit=crop",
+      "id": "id_mpswni89pcw2gk",
+      "slug": "",
+      "title": "बंधपत्र खत्म होने के बाद भी डॉक्टर कर रहे इलाज",
+      "categoryId": "id_mpswjze4r5vnst",
+      "excerpt": "",
+      "body": "<p></p>",
+      "imageUrl": "https://bharatnirmannews.com/wp-content/uploads/2026/05/bhggghugu11.png",
+      "publishedAt": "2026-05-30",
       "featured": false,
-      "publishedAt": "2026-05-28"
+      "tags": [
+        "भारत निर्माण",
+        "समाचार"
+      ]
     },
     {
-      "id": "a5",
-      "slug": "indo-us-relations-nyt-report",
-      "title": "भारत-अमेरिका संबंध: NYT की रिपोर्ट पर चर्चा",
-      "categoryId": "duniya",
-      "excerpt": "द्विपक्षीय संबंधों पर अंतरराष्ट्रीय मीडिया की रिपोर्ट।",
-      "body": "<p>न्यूयॉर्क टाइम्स ने भारत-अमेरिका संबंधों पर विश्लेषण प्रकाशित किया।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=225&fit=crop",
+      "id": "id_mpswngfrxymrda",
+      "slug": "5-asi",
+      "title": "रिश्वतखोरी का ऑडियो वायरल: 5 हजार रुपये मांगने वाले ASI संतोष बड़गैयां निलंबित",
+      "categoryId": "id_mpswjze4r5vnst",
+      "excerpt": "",
+      "body": "<p></p>",
+      "imageUrl": "https://bharatnirmannews.com/wp-content/uploads/2026/05/file_000000008df4720b976e9659b2606524.png",
+      "publishedAt": "2026-05-30",
       "featured": false,
-      "publishedAt": "2026-05-28"
-    },
-    {
-      "id": "a6",
-      "slug": "vinesh-phogat-asian-games-trials",
-      "title": "Asian Games Trials: विनेश फोगाट की एंट्री पर विवाद",
-      "categoryId": "khel",
-      "excerpt": "WFI ने सुप्रीम कोर्ट में याचिका दायर की।",
-      "body": "<p>एशियाई खेल चयन परीक्षणों में विनेश फोगाट की भागीदारी को लेकर विवाद जारी है।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&h=225&fit=crop",
-      "featured": false,
-      "publishedAt": "2026-05-28"
-    },
-    {
-      "id": "a7",
-      "slug": "sourav-ganguly-biopic-shooting",
-      "title": "कोलकाता में सौरव गांगुली बायोपिक की शूटिंग शुरू",
-      "categoryId": "bollywood",
-      "excerpt": "राजकुमार राव सेट से तस्वीरें वायरल।",
-      "body": "<p>कोलकाता के एडन गार्डens में बायोपिक की शूटिंग शुरू हुई।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=225&fit=crop",
-      "featured": false,
-      "publishedAt": "2026-05-28"
-    },
-    {
-      "id": "a8",
-      "slug": "neet-paper-leak-meeting",
-      "title": "NEET पेपर लीक: राजनाथ सिंह के घर बड़ी बैठक",
-      "categoryId": "education",
-      "excerpt": "शिक्षा मंत्री और NTA अधिकारी भी मौजूद।",
-      "body": "<p>नीट पेपर लीक मामले पर उच्च स्तरीय बैठक हुई।</p>",
-      "imageUrl": "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=225&fit=crop",
-      "featured": false,
-      "publishedAt": "2026-05-28"
+      "tags": [
+        "भारत निर्माण",
+        "समाचार"
+      ]
     }
-  ]
+  ],
+  "emergencyMessage": {
+    "enabled": true,
+    "text": "To verify your identity, please log on to verify.newsindiatv.in.  -----------------          अपनी पहचान सत्यापित करने के लिए कृपया verify.newsindiatv.in पर लॉग इन करें।",
+    "url": "",
+    "speed": 10
+  }
 }
