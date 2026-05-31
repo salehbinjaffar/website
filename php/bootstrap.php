@@ -133,6 +133,15 @@ function nitv_merge_defaults(array $site): array {
         $site['youtubeChannel'] ?? []
     );
     unset($site['youtubeGallery'], $site['youtubePlaylist']);
+    $site['emergencyMessage'] = array_merge(
+        [
+            'enabled' => false,
+            'text' => '',
+            'url' => '',
+            'speed' => 20,
+        ],
+        $site['emergencyMessage'] ?? []
+    );
     return $site;
 }
 
@@ -418,3 +427,83 @@ require_once __DIR__ . '/icons.php';
 require_once __DIR__ . '/rss.php';
 require_once __DIR__ . '/home-ui.php';
 require_once __DIR__ . '/youtube.php';
+
+function nitv_render_news_feed(array $site, array $articles): string {
+    if (empty($articles)) return '';
+    
+    $cards = '';
+    foreach ($articles as $article) {
+        $category = nitv_cat_name($site, $article['categoryId'] ?? '');
+        $date = date('d M Y', strtotime($article['publishedAt'] ?? 'now'));
+        $articleUrl = nitv_url('/article/' . ($article['slug'] ?? ''));
+        $articleTitle = nitv_h($article['title'] ?? '');
+        $articleImage = nitv_h(nitv_media_url($article['imageUrl'] ?? ''));
+        
+        $cards .= '<article class="news-feed-card" onclick="window.location.href=\'' . nitv_h($articleUrl) . '\'">
+      <div class="news-feed-content">
+        <span class="news-feed-category">' . nitv_h($category) . '</span>
+        <h3 class="news-feed-headline">' . $articleTitle . '</h3>
+        <div class="news-feed-meta">
+          <time>' . nitv_h($date) . '</time>
+        </div>
+        <div class="news-feed-share-icons">
+          <button class="news-feed-share-btn" title="Share on Facebook" onclick="event.stopPropagation(); shareArticle(\'facebook\', \'' . nitv_h($articleUrl) . '\')">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </button>
+          <button class="news-feed-share-btn" title="Share on X" onclick="event.stopPropagation(); shareArticle(\'twitter\', \'' . nitv_h($articleUrl) . '\')">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </button>
+          <button class="news-feed-share-btn" title="Copy Link" onclick="event.stopPropagation(); copyArticleLink(\'' . nitv_h($articleUrl) . '\', \'' . $articleTitle . '\', \'' . $articleImage . '\')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="news-feed-thumbnail-wrapper">
+        <img src="' . $articleImage . '" alt="' . $articleTitle . '" loading="lazy">
+      </div>
+    </article>';
+    }
+    
+    return '<section class="news-feed-section">
+    <header class="news-feed-header">
+      <h2 class="news-feed-title">ताज़ा समाचार</h2>
+    </header>
+    <div class="news-feed-list">
+      ' . $cards . '
+    </div>
+    <button class="news-feed-load-more" id="loadMoreNews">और खबरें देखें</button>
+  </section>
+  <script>
+    function shareArticle(platform, url) {
+      const shareUrl = encodeURIComponent(url);
+      if (platform === \'facebook\') {
+        window.open(\'https://www.facebook.com/sharer/sharer.php?u=\' + shareUrl, \'_blank\');
+      } else if (platform === \'twitter\') {
+        window.open(\'https://twitter.com/intent/tweet?url=\' + shareUrl, \'_blank\');
+      }
+    }
+    function copyArticleLink(url, title, imageUrl) {
+      const message = title + \'\\n\\n\' + url + \'\\n\\n\' + imageUrl;
+      navigator.clipboard.writeText(message).then(() => {
+        alert(\'लिंक और इमेज कॉपी हो गया!\');
+      });
+    }
+  </script>';
+}
+
+function nitv_render_emergency_banner(array $site): string {
+    $emergency = $site['emergencyMessage'] ?? [];
+    if (empty($emergency['enabled']) || empty($emergency['text'])) {
+        return '';
+    }
+    
+    $text = nitv_h($emergency['text'] ?? '');
+    $url = nitv_h($emergency['url'] ?? '');
+    $speed = (int)($emergency['speed'] ?? 20);
+    
+    if ($url) {
+        return '<div class="emergency-banner"><div class="emergency-banner-wrap" style="animation-duration:' . $speed . 's"><span class="emergency-banner-text"><a href="' . $url . '" class="emergency-link">' . $text . '</a></span></div></div>';
+    } else {
+        return '<div class="emergency-banner"><div class="emergency-banner-wrap" style="animation-duration:' . $speed . 's"><span class="emergency-banner-text">' . $text . '</span></div></div>';
+    }
+}

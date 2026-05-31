@@ -206,6 +206,12 @@ if (str_starts_with($path, '/admin')) {
                 ],
             ];
             $site['slider'] = nitv_parse_slider_post($_POST);
+            $site['emergencyMessage'] = [
+                'enabled' => isset($_POST['emergencyEnabled']),
+                'text' => trim($_POST['emergencyText'] ?? ''),
+                'url' => trim($_POST['emergencyUrl'] ?? ''),
+                'speed' => min(60, max(10, (int)($_POST['emergencySpeed'] ?? 20))),
+            ];
             unset($site['youtubeGallery'], $site['youtubePlaylist']);
             if (!empty($site['breaking']['rss']['enabled'])) {
                 nitv_rss_refresh($site, isset($_POST['refreshRss']));
@@ -217,6 +223,7 @@ if (str_starts_with($path, '/admin')) {
         }
         $b = $site['breaking'] ?? [];
         $rss = $b['rss'] ?? [];
+        $emergency = $site['emergencyMessage'] ?? [];
         $msg = isset($_GET['saved']) ? "<p class='ok'>सेव हो गया</p>" : '';
         if (isset($_GET['refreshed'])) {
             $msg .= "<p class='ok'>RSS फ़ीड अपडेट हो गई।</p>";
@@ -232,6 +239,10 @@ if (str_starts_with($path, '/admin')) {
             'RSS_STATUS' => nitv_rss_status_html($site),
             'BREAKING_ROWS' => nitv_breaking_editor_rows($site),
             'SLIDER_ROWS' => nitv_slider_editor_rows($site),
+            'EMERGENCY_ENABLED' => !empty($emergency['enabled']) ? 'checked' : '',
+            'EMERGENCY_TEXT' => nitv_h($emergency['text'] ?? ''),
+            'EMERGENCY_URL' => nitv_h($emergency['url'] ?? ''),
+            'EMERGENCY_SPEED' => (string)($emergency['speed'] ?? 20),
             'MESSAGE' => $msg,
         ]);
         exit;
@@ -531,10 +542,14 @@ if ($path === '/' || $path === '/index.html') {
         </header>
         <div class="youtube-videos-grid">' . $videoCards . '</div></section>';
     }
+    $newsFeed = nitv_render_news_feed($site, $sortedArticles);
+    $emergencyBanner = nitv_render_emergency_banner($site);
     $page = nitv_replace(nitv_tpl('home.html'), [
         'SLIDER' => $sliderHtml,
         'SIDE_LIST' => $side,
         'YOUTUBE_SECTION' => $youtubeSection,
+        'NEWS_FEED' => $newsFeed,
+        'EMERGENCY_BANNER' => $emergencyBanner,
         'NEWS_GRID' => $grid,
         'TRENDING' => $trend,
     ]);
