@@ -543,13 +543,11 @@ if ($path === '/' || $path === '/index.html') {
         <div class="youtube-videos-grid">' . $videoCards . '</div></section>';
     }
     $newsFeed = nitv_render_news_feed($site, $sortedArticles);
-    $emergencyBanner = nitv_render_emergency_banner($site);
     $page = nitv_replace(nitv_tpl('home.html'), [
         'SLIDER' => $sliderHtml,
         'SIDE_LIST' => $side,
         'YOUTUBE_SECTION' => $youtubeSection,
         'NEWS_FEED' => $newsFeed,
-        'EMERGENCY_BANNER' => $emergencyBanner,
         'NEWS_GRID' => $grid,
         'TRENDING' => $trend,
     ]);

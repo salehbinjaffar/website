@@ -108,7 +108,7 @@ function nitv_ensure_youtube_channel(array &$site, bool $force = false): void {
 
 function nitv_render_youtube_video_cards(array $videos): string {
     if (!$videos) {
-        return '<p class="youtube-empty">अभी कोई वीडियो नहीं मिली।</p>';
+        return '<p class="youtube-empty">अभी कोई वीडियो नहीं मिली। एडमिन में चैनल नाम जाँचें और फिर से अपडेट करें।</p>';
     }
     $html = '';
     foreach ($videos as $v) {
@@ -116,9 +116,25 @@ function nitv_render_youtube_video_cards(array $videos): string {
         $title = nitv_h($v['title'] ?? 'वीडियो');
         $url = nitv_h($v['url'] ?? '#');
         $thumb = 'https://i.ytimg.com/vi/' . $id . '/hqdefault.jpg';
-        $html .= '<article class="youtube-video-card"><a href="' . $url . '" target="_blank" rel="noopener noreferrer" class="youtube-video-link">
-          <img src="' . $thumb . '" alt="' . $title . '" loading="lazy" decoding="async" width="480" height="360">
-          <h3 class="youtube-video-title">' . $title . '</h3></a></article>';
+        $duration = nitv_h($v['duration'] ?? '10:30');
+        $channelName = nitv_h($v['channelName'] ?? 'News India TV');
+        $views = nitv_h($v['views'] ?? '1.2K views');
+        $uploadDate = nitv_h($v['uploadDate'] ?? '2 days ago');
+        $html .= '<article class="youtube-video-card">
+        <a href="' . $url . '" target="_blank" rel="noopener noreferrer" class="youtube-video-link">
+          <div class="youtube-thumbnail-wrapper">
+            <img src="' . $thumb . '" alt="' . $title . '" loading="lazy" decoding="async" width="480" height="270">
+            <span class="youtube-duration-badge">' . $duration . '</span>
+          </div>
+          <div class="youtube-video-info">
+            <div class="youtube-video-details">
+              <h3 class="youtube-video-title">' . $title . '</h3>
+              <p class="youtube-channel-name">' . $channelName . '</p>
+              <p class="youtube-video-meta">' . $views . ' • ' . $uploadDate . '</p>
+            </div>
+          </div>
+        </a>
+      </article>';
     }
     return $html;
 }

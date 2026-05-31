@@ -365,6 +365,7 @@ function nitv_layout(array $site, string $content, array $opts = []): string {
         'GOOGLE_ADS_HEAD' => $ad['head'],
         'AD_SLOT' => $ad['slot'],
         'HEADER_AD_BANNER' => nitv_render_header_banner($site),
+        'EMERGENCY_BANNER' => nitv_render_emergency_banner($site),
         'EXTRA_SCRIPTS' => str_replace('/public/', nitv_asset('public/'), $opts['extraScripts'] ?? ''),
         'LAYOUT_CSS' => nitv_asset('public/css/style.css'),
     ]);
