@@ -441,10 +441,17 @@ if (str_starts_with($path, '/admin')) {
     if ($path === '/admin/articles/new' || $path === '/admin/articles/edit') {
         $article = null;
         if ($path === '/admin/articles/edit') {
+            $editId = $_GET['id'] ?? '';
+            error_log('Editing article with ID: ' . $editId);
             foreach ($site['articles'] as $a) {
-                if ($a['id'] === ($_GET['id'] ?? '')) { $article = $a; break; }
+                if ($a['id'] === $editId) { $article = $a; break; }
             }
-            if (!$article) { http_response_code(404); echo 'Not found'; exit; }
+            if (!$article) {
+                error_log('Article not found. ID: ' . $editId . '. Available IDs: ' . implode(', ', array_column($site['articles'], 'id')));
+                http_response_code(404);
+                echo 'Article not found. ID: ' . nitv_h($editId);
+                exit;
+            }
         }
         if ($method === 'POST' && isset($_POST['title'])) {
             $id = $_POST['id'] ?: ('id_' . bin2hex(random_bytes(6)));
@@ -453,6 +460,9 @@ if (str_starts_with($path, '/admin')) {
             $imageUrl = trim($_POST['imageUrl'] ?? '');
             if (!empty($_POST['imageBase64'])) {
                 $uploaded = nitv_save_article_base64($_POST['imageBase64'], $id);
+                if (!$uploaded) {
+                    error_log('Failed to save article image for ID: ' . $id);
+                }
                 if ($uploaded) $imageUrl = $uploaded;
             }
             $payload = [
