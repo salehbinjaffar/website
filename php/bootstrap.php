@@ -257,7 +257,7 @@ function nitv_upload_dir(): string {
 }
 
 function nitv_save_upload_buffer(string $buffer, string $mime, string $subPath): ?string {
-    $max = 4 * 1024 * 1024;
+    $max = 8 * 1024 * 1024;
     if (strlen($buffer) > $max) return null;
     $exts = ['image/jpeg' => '.jpg', 'image/png' => '.png', 'image/webp' => '.webp', 'image/gif' => '.gif'];
     if (!isset($exts[$mime])) return null;

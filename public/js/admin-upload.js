@@ -10,8 +10,8 @@
       cb(null, "केवल इमेज फाइल चुनें (JPG, PNG, WebP, GIF)");
       return;
     }
-    if (file.size > 6 * 1024 * 1024) {
-      cb(null, "फाइल 6MB से छोटी होनी चाहिए");
+    if (file.size > 8 * 1024 * 1024) {
+      cb(null, "फाइल 8MB से छोटी होनी चाहिए");
       return;
     }
     var reader = new FileReader();
